@@ -1,17 +1,13 @@
 import React from 'react';
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-
 import { createMuiTheme, withStyles } from '@material-ui/core/styles'
-import blue from '@material-ui/core/colors/blue'
-//import black from '@material-ui/core/colors/black';
 
 const styles = {
   disabled: {
     backgroundColor: 'gray',
   },
   highlighted: {
-//    backgroundColor: 'gray',
   },
   normal: {
   },

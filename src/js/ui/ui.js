@@ -1,6 +1,7 @@
 import React from 'react';
 import Tile from './tile'
 import ActionPicker from './actions/picker'
+import Hand from './hand'
 
 export default class extends React.Component {
 
@@ -59,6 +60,12 @@ export default class extends React.Component {
           </tr>))
         }
         </table>
+        <Hand
+        game={game}
+          player={game.countries[0]}
+          highlight={this.state.highlight}
+          onSelect={this.state.highlightCallback}
+          />
         <ActionPicker
           game={game}
           player={game.countries[0]}

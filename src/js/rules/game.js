@@ -1,14 +1,5 @@
-const times = (laps, lap) => f => {
-  lap = lap || 0
-  if (lap < laps) {
-    f(lap)
-    times (laps, lap+1) (f)
-  }
-}
-
-const range = (to) => {
-  return [...Array(to).keys()]
-}
+import {newImprovementQueue, startingHand, startingImprovement} from './improvement'
+import * as _ from '../collections'
 
 class TileType {
   constructor(name, localModifier, adjecentModifier, settlable) {
@@ -28,8 +19,8 @@ const INTERIOR_TILE_TYPES = [
 const newMap = (w, h) => {
 
   const res = new Array()
-  times(h) (
-    y => times(w) (x => res.push(new Tile(new Pos(x,y), INTERIOR_TILE_TYPES[0]))
+  _.times(h) (
+    y => _.times(w) (x => res.push(new Tile(new Pos(x,y), INTERIOR_TILE_TYPES[0]))
   ))
   return res
 }
@@ -73,20 +64,6 @@ class Tile {
   }
 }
 
-class Improvement {
-  constructor() {
-  }
-}
-
-const newImprovementQueue = (eraSize) => {
-  return []
-}
-
-const startingHand = () => {
-  return []
-}
-
-
 export default class {
   constructor(doc) {
     this.WIDTH = 21
@@ -107,11 +84,11 @@ export default class {
     ];
     this.turn = 1
 
-    times(4) (
+    _.times(4) (
       (idx) => this.getTile(this.STARTING_POS[idx])
         .improve(
           this.countries[idx],
-          new Improvement())
+          startingImprovement())
         .reveal()
     )
   }
@@ -125,8 +102,8 @@ export default class {
   }
 
   getRows() {
-    console.log("GGG", range(this.HEIGHT))
-    return range(this.HEIGHT).map(idx => this.getRow(idx))
+    console.log("GGG", _.range(this.HEIGHT))
+    return _.range(this.HEIGHT).map(idx => this.getRow(idx))
   }
 
   getRow(idx) {
