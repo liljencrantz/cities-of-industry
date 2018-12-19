@@ -1,12 +1,12 @@
-import React from 'react';
+import React from 'react'
 import NoOp from './noop'
 import Explore from './explore'
 import Improve from './improve'
 
 export default class extends React.Component {
   render() {
-    const actionCallback = this.props.onAction;
-    const highlightCallback = this.props.onHighlight;
+    const actionCallback = this.props.onAction
+    const highlightCallback = this.props.onHighlight
     return (<span>
       <NoOp onAction={actionCallback}/>
       <Explore
@@ -21,6 +21,6 @@ export default class extends React.Component {
         game={this.props.game}
         player={this.props.player}
         />
-      </span>);
+      </span>)
   }
 }

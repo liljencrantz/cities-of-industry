@@ -11,7 +11,7 @@ function main() {
     new AI(game, game.countries[2]),
     new AI(game, game.countries[3])
   ]
-  ReactDOM.render(<UI game={game} ai={ai}/>, document.querySelector('#ui'));
+  ReactDOM.render(<UI game={game} ai={ai}/>, document.querySelector('#ui'))
 }
 
 main()

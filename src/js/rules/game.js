@@ -99,7 +99,7 @@ export default class {
       new Country("AI1", this, startingHand()),
       new Country("AI2", this, startingHand()),
       new Country("AI3", this, startingHand())
-    ];
+    ]
     this.turn = 1
 
     _.times(4) (

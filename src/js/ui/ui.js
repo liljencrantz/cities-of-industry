@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 import Tile from './tile'
 import ActionPicker from './actions/picker'
 import HandItem from './hand'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles'
 
 const styles = {
   handBar: {

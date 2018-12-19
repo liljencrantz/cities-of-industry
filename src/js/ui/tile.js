@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import {withStyles} from '@material-ui/core/styles'
@@ -18,7 +18,7 @@ const styles = {
 class Tile extends React.Component {
 
   render() {
-    const {disabled, tile, classes, highlight, onSelect} = this.props;
+    const {disabled, tile, classes, highlight, onSelect} = this.props
     const className = disabled ? classes.disabled :
       (highlight ? classes.highlighted : classes.normal)
     let description = '?'
@@ -49,4 +49,4 @@ class Tile extends React.Component {
   }
 }
 
-export default withStyles(styles)(Tile);
+export default withStyles(styles)(Tile)
