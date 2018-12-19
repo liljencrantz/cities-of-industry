@@ -11,22 +11,22 @@ export class ExploreAction {
 }
 
 export class ImproveAction {
-  constructor(game, pos, country, idx) {
+  constructor(game, pos, country, improvement) {
     this.country = country
-    this.handIdx = idx
+    this.improvement = improvement
     this.game = game
     this.position = pos
-    this.priority = country.getHand(idx).priority
+    this.priority = improvement.priority
   }
 
   perform() {
     const pos = this.position
-    const tile = game.getTile(pos)
+    const tile = this.game.getTile(pos)
     const owner = tile.owner
     if (owner != null && owner != country) {
       return
     }
-    tile.improve(this.country, this.country.dropFromHand(this.handIdx))
+    tile.improve(this.country, this.country.dropFromHand(this.improvement))
   }
 }
 

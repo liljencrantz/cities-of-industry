@@ -37,8 +37,26 @@ class Pos {
 }
 
 class Country {
-  constructor(startingHand) {
+  constructor(name, game, startingHand) {
+    this.name = name
+    this.game = game
     this.hand = startingHand
+  }
+
+  dropFromHand(improvement) {
+    this.hand = this.hand.filter(i => i != improvement)
+    while(this.hand.length < this.game.handSize) {
+      const imp = this.game.drawImprovement()
+      if(imp === undefined) {
+        break
+      }
+      this.hand.push(imp)
+    }
+    return improvement
+  }
+
+  getPlayable() {
+    return this.hand.slice(0,3)
   }
 }
 
@@ -77,10 +95,10 @@ export default class {
     this.improvementHeap = new Array()
     this.improvementQueue = newImprovementQueue((this.WIDTH*this.HEIGHT)/4)
     this.countries = [
-      new Country(startingHand()),
-      new Country(startingHand()),
-      new Country(startingHand()),
-      new Country(startingHand())
+      new Country("Player", this, startingHand()),
+      new Country("AI1", this, startingHand()),
+      new Country("AI2", this, startingHand()),
+      new Country("AI3", this, startingHand())
     ];
     this.turn = 1
 
@@ -127,6 +145,10 @@ export default class {
       res.push(this.getTile(pos.relativeTo(0, 1)))
     }
     return res
+  }
+
+  drawImprovement() {
+    return this.improvementQueue.pop()
   }
 
   perform(actions) {

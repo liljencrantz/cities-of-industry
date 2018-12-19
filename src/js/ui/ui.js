@@ -1,21 +1,56 @@
 import React from 'react';
 import Tile from './tile'
 import ActionPicker from './actions/picker'
-import Hand from './hand'
+import HandItem from './hand'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import {withStyles} from '@material-ui/core/styles';
 
-export default class extends React.Component {
+const styles = {
+  handBar: {
+    top: 'auto',
+    bottom: 0,
+    backgroundColor: 'white',
+    color: 'black',
+  },
+  board: {
+    backgroundColor: '#ddd',
+    paddingTop: '5em',
+    paddingBottom: '5em',
+    paddingLeft: '1em',
+    paddingRight: '1em',
+    margin: '0',
+  },
+}
+
+class UI extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
       game: props.game,
       highlight: new Set(),
-      highlightCallback: null,
+      onTileSelect: this.showTileCallback(),
+      onHandSelect: this.showHandCallback(),
+    }
+  }
+
+  showTileCallback() {
+    return (tile) => {
+      console.log(tile)
+    }
+  }
+
+  showHandCallback() {
+    return (imp) => {
+      console.log(imp)
     }
   }
 
   render() {
-    const game = this.state.game
+    const {game, highlight} = this.state
+    const {classes} = this.props
+    const player = game.countries[0]
 
     const actionCallback = (action) => {
       const actions = [
@@ -27,52 +62,85 @@ export default class extends React.Component {
       this.setState({
         ...this.state,
         highlight: new Set(),
-        highlightCallback: null,
-        game: game})
+        onTileSelect: this.showTileCallback(),
+        onHandSelect: this.showHandCallback(),
+        game: game
+      })
     }
 
     const highlightCallback = (highlight, callback) => {
-      this.setState({
-        ...this.state,
-        highlight: highlight,
-        highlightCallback: callback
-      })
+      if (highlight.size == 0) {
+        this.setState({
+          ...this.state,
+          highlight: new Set(),
+          onTileSelect: this.showTileCallback(),
+          onHandSelect: this.showHandCallback(),
+        })
+      } else {
+        this.setState({
+          ...this.state,
+          highlight: highlight,
+          onTileSelect: callback,
+          onHandSelect: callback,
+        })
+      }
     }
 
     return (
       <span>
-        Turn {game.turn}
-        <table>
+        <AppBar position="fixed">
+          <Toolbar>
+
+            Turn {game.turn}
+
+            <ActionPicker
+              game={game}
+              player={player}
+              onAction={actionCallback}
+              onHighlight={highlightCallback}
+            />
+
+          </Toolbar>
+        </AppBar>
+        <table className={classes.board}>
+          <tbody>
         {
           game.getRows().map(row => (<tr>
-          {row.map(tile => (
-            <td>
-              <Tile
-                tile={tile}
-                disabled={
-                  (this.state.highlightCallback != null) &&
-                  !this.state.highlight.has(tile.id)}
-                highlight={this.state.highlight.has(tile.id)}
-                onSelect={this.state.highlightCallback}
+            {row.map(tile => (
+              <td>
+                <Tile
+                  tile={tile}
+                  disabled={
+                    (highlight.size > 0) &&
+                    !highlight.has(tile.id)}
+                  highlight={highlight.has(tile.id)}
+                  onSelect={this.state.onTileSelect}
                 />
-            </td>))
-          }
+              </td>))
+            }
           </tr>))
         }
+        </tbody>
         </table>
-        <Hand
-        game={game}
-          player={game.countries[0]}
-          highlight={this.state.highlight}
-          onSelect={this.state.highlightCallback}
-          />
-        <ActionPicker
-          game={game}
-          player={game.countries[0]}
-          onAction={actionCallback}
-          onHighlight={highlightCallback}
-          />
+
+        <AppBar position="fixed" className={classes.handBar}>
+          <Toolbar>
+            {
+              player.hand.map(imp => (
+                <HandItem
+                  item={imp}
+                  disabled={
+                    (highlight.size > 0) &&
+                    !highlight.has(imp.id)}
+                  highlight={highlight.has(imp.id)}
+                  onSelect={this.state.onHandSelect}
+                />))
+            }
+          </Toolbar>
+        </AppBar>
       </span>
     )
   }
 }
+
+export default withStyles(styles)(UI)
