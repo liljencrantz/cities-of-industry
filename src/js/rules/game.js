@@ -1,98 +1,8 @@
 import {newImprovementQueue, startingHand, startingImprovement} from './improvement'
+import Player from './player'
 import * as _ from '../collections'
-
-class TileType {
-  constructor(name, localModifier, adjecentModifier, settlable) {
-      this.name = name
-      this.localModifier = localModifier
-      this.adjecentModifier = adjecentModifier
-      this.settlable = settlable
-  }
-}
-
-const OCEAN_TILE_TYPE = new TileType("Ocean", {}, {trade: 0.5, room: 0.5}, false)
-const INTERIOR_TILE_TYPES = [
-  new TileType("Meadow", {food: 0.5}, {}, true),
-  new TileType("Hill", {production: 0.5, trade: -0.25}, {science: 0.25, room: 0.25}, true)
-]
-
-const newMap = (w, h) => {
-
-  const res = new Array()
-  _.times(h) (
-    y => _.times(w) (x => res.push(new Tile(new Pos(x,y), INTERIOR_TILE_TYPES[0]))
-  ))
-  return res
-}
-
-class Pos {
-  constructor(x, y) {
-    this.x = x
-    this.y = y
-  }
-
-  relativeTo(dx, dy) {
-    return new Pos(this.x + dx, this.y + dy)
-  }
-}
-
-class Country {
-  constructor(name, game, startingHand) {
-    this.name = name
-    this.game = game
-    this.hand = startingHand
-  }
-
-  dropFromHand(improvement) {
-    this.hand = this.hand.filter(i => i != improvement)
-    while(this.hand.length < this.game.handSize) {
-      const imp = this.game.drawImprovement()
-      if(imp === undefined) {
-        break
-      }
-      this.hand.push(imp)
-    }
-    return improvement
-  }
-
-  getPlayable() {
-    return this.hand.slice(0,3)
-  }
-
-  getLegalTiles(improvement) {
-    return new Set(this.game.tiles
-        .filter(tile => tile.revealed && tile.improvement == null)
-        .filter(tile => this.game.getAdjecent(tile)
-          .filter(tile => tile.improvement != null && tile.owner === this).length > 0)
-        .map(tile => tile.id))
-  }
-
-  get legalImprovements() {
-    return new Set(this.getPlayable().map(i => i.id))
-  }
-}
-
-class Tile {
-  constructor(pos, type) {
-    this.id = `tile-${pos.x}-${pos.y}`
-    this.pos = pos
-    this.type = type
-    this.revealed = false
-    this.improvement = null
-    this.owner = null
-  }
-
-  improve(owner, improvement) {
-    this.owner = owner
-    this.improvement = improvement
-    return this
-  }
-
-  reveal() {
-    this.revealed = true
-    return this
-  }
-}
+import {Tile, TileType, newMap} from './tile'
+import Pos from './pos'
 
 export default class {
   constructor(doc) {
@@ -106,18 +16,18 @@ export default class {
     this.tiles = newMap(this.WIDTH, this.HEIGHT)
     this.improvementHeap = new Array()
     this.improvementQueue = newImprovementQueue((this.WIDTH*this.HEIGHT)/4)
-    this.countries = [
-      new Country("Player", this, startingHand()),
-      new Country("AI1", this, startingHand()),
-      new Country("AI2", this, startingHand()),
-      new Country("AI3", this, startingHand())
+    this.players = [
+      new Player("Player", this, startingHand()),
+      new Player("AI1", this, startingHand()),
+      new Player("AI2", this, startingHand()),
+      new Player("AI3", this, startingHand())
     ]
     this.turn = 1
 
     _.times(4) (
       (idx) => this.getTile(this.STARTING_POS[idx])
         .improve(
-          this.countries[idx],
+          this.players[idx],
           startingImprovement())
         .reveal()
     )

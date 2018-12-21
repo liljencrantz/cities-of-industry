@@ -16,11 +16,10 @@ export default class extends React.Component {
     }
 
     const availableImprovements = player.legalImprovements
-    const onButtonPress = () => onHighlight(availableImprovements, onHandPicked)
 
     const button = (
       <Button
-        onClick={onButtonPress}
+        onClick={() => onHighlight(availableImprovements, onHandPicked)}
         disabled={availableImprovements.size == 0}
       >
         Improve

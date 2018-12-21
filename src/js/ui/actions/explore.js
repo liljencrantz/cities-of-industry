@@ -9,8 +9,7 @@ export default class extends React.Component {
       this.props.onAction(new ExploreAction(game, tile.pos))
 
     const friends = game.explorable
-    console.log("YO", friends)
-    const onButtonPress = () => this.props.onHighlight(friends, onTilePicked)
+        const onButtonPress = () => this.props.onHighlight(friends, onTilePicked)
     return <Button onClick={onButtonPress}>Explore</Button>
   }
 }

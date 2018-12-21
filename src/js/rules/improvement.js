@@ -1,27 +1,30 @@
 import * as _ from '../collections'
+import {} from './tile'
 
 class ImprovementType {
-  constructor(name) {
+  constructor(name, level, yields, bonuses, restrictions) {
     this.name = name
+    this.yields = yields
+    this.bonuses = bonuses
+    this.restrictions = restrictions
   }
 }
 
 const STARTING_IMPROVEMENT_TYPE =
-  new ImprovementType("Village square")
+  new ImprovementType("Village square", 1, {food: 4, gold: 2, ore: 1, space: 2}, {}, {})
 
 var id = 0
 
 const STARTING_HAND_IMPROVEMENT_TYPES = [
-  new ImprovementType("Mine"),
-  new ImprovementType("Market"),
-  new ImprovementType("Country fair"),
-  new ImprovementType("Inn"),
-  new ImprovementType("Cottage"),
-  new ImprovementType("Workshop"),
-  new ImprovementType("Mine"),
-  new ImprovementType("Fishing boat"),
-  new ImprovementType("Meeting place"),
-  new ImprovementType("School"),
+  new ImprovementType("Mine", 1, {ore: 4}, {}, {}),
+  new ImprovementType("Market", 1, {gold: 4}),
+  new ImprovementType("Country fair", 1, {gold: 4}),
+  new ImprovementType("Inn", 1, {food: 4}),
+  new ImprovementType("Cottage", 1, {space: 4}),
+  new ImprovementType("Workshop", 1, {ore: 4}, {}, {}),
+  new ImprovementType("Fishing boat", 1, {food: 4}, {}, {}),
+  new ImprovementType("Meeting place", 1, {}, {}, {}),
+  new ImprovementType("School", 1, {knowledge: 4}, {}, {}),
 ]
 
 class Improvement {

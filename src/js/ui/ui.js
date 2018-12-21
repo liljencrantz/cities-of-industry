@@ -50,7 +50,7 @@ class UI extends React.Component {
   render() {
     const {game, highlight} = this.state
     const {classes} = this.props
-    const player = game.countries[0]
+    const player = game.players[0]
 
     const actionCallback = (action) => {
       const actions = [
