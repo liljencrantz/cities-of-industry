@@ -7,11 +7,7 @@ export default class extends React.Component {
     const {game, player, onHighlight} = this.props
 
     const onHandPicked = (improvement) => {
-      const availableTiles = new Set(game.tiles
-        .filter(tile => tile.revealed && tile.improvement == null)
-        .filter(tile => game.getAdjecent(tile)
-          .filter(tile => tile.improvement != null && tile.owner == player).length > 0)
-        .map(tile => tile.id))
+      const availableTiles = player.getLegalTiles(improvement)
 
       const onTilePicked = (tile) => {
         this.props.onAction(new ImproveAction(game, tile.pos, player, improvement))
@@ -19,8 +15,7 @@ export default class extends React.Component {
       onHighlight(availableTiles, onTilePicked)
     }
 
-    const availableImprovements =
-      new Set(player.getPlayable().map(i => i.id))
+    const availableImprovements = player.legalImprovements
     const onButtonPress = () => onHighlight(availableImprovements, onHandPicked)
 
     const button = (

@@ -1,4 +1,4 @@
-## TODO
+# TODO
 
 * Implement assets calculations
 * Implement improvement yields
@@ -14,3 +14,13 @@
 * Simple one-step AI benefit evaluation
 * Machine learning AI implementation?
 
+# How to run
+
+## Install node
+
+Install node. How to do this depends on your system. Google is your friend!
+
+## Run the thing
+
+ npm install
+ npm start

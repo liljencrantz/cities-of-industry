@@ -105,7 +105,7 @@ class UI extends React.Component {
         <table className={classes.board}>
           <tbody>
         {
-          game.getRows().map(row => (<tr>
+          game.rows.map(row => (<tr>
             {row.map(tile => (
               <td>
                 <Tile

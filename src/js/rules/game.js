@@ -58,6 +58,18 @@ class Country {
   getPlayable() {
     return this.hand.slice(0,3)
   }
+
+  getLegalTiles(improvement) {
+    return new Set(this.game.tiles
+        .filter(tile => tile.revealed && tile.improvement == null)
+        .filter(tile => this.game.getAdjecent(tile)
+          .filter(tile => tile.improvement != null && tile.owner === this).length > 0)
+        .map(tile => tile.id))
+  }
+
+  get legalImprovements() {
+    return new Set(this.getPlayable().map(i => i.id))
+  }
 }
 
 class Tile {
@@ -119,8 +131,7 @@ export default class {
     this.getTile(pos).revealed = true
   }
 
-  getRows() {
-    console.log("GGG", _.range(this.HEIGHT))
+  get rows() {
     return _.range(this.HEIGHT).map(idx => this.getRow(idx))
   }
 
@@ -156,5 +167,12 @@ export default class {
       .sort((a,b) => a.priority - b.priority)
       .forEach((action) => action.perform())
       this.turn++
+  }
+
+  get explorable() {
+    return new Set(this.tiles
+      .filter(tile => !tile.revealed)
+      .filter(tile => this.getAdjecent(tile).filter(tile => tile.revealed).length > 0)
+      .map(tile => tile.id))
   }
 }

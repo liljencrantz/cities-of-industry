@@ -7,10 +7,9 @@ export default class extends React.Component {
     const game = this.props.game
     const onTilePicked = (tile) =>
       this.props.onAction(new ExploreAction(game, tile.pos))
-    const friends = new Set(game.tiles
-      .filter(tile => !tile.revealed)
-      .filter(tile => game.getAdjecent(tile).filter(tile => tile.revealed).length > 0)
-      .map(tile => tile.id))
+
+    const friends = game.explorable
+    console.log("YO", friends)
     const onButtonPress = () => this.props.onHighlight(friends, onTilePicked)
     return <Button onClick={onButtonPress}>Explore</Button>
   }
