@@ -4,26 +4,21 @@ import {ImproveAction} from '../../rules/actions'
 
 export default class extends React.Component {
   render() {
-    const {game, player, onHighlight} = this.props
-
-    const onHandPicked = (improvement) => {
-      const availableTiles = player.getLegalTiles(improvement)
-
-      const onTilePicked = (tile) => {
-        this.props.onAction(new ImproveAction(game, tile.pos, player, improvement))
-      }
-      onHighlight(availableTiles, onTilePicked)
-    }
+    const {game, player, queryUser} = this.props
 
     const availableImprovements = player.legalImprovements
 
-    const button = (
+    const onButtonPress = () => queryUser(availableImprovements)
+      .then(imp => {
+        const availableTiles = player.getLegalTiles(imp)
+        queryUser(availableTiles)
+          .then(tile => this.props.onAction(new ImproveAction(game, tile.pos, player, imp)))
+      })
+    return (
       <Button
-        onClick={() => onHighlight(availableImprovements, onHandPicked)}
-        disabled={availableImprovements.size == 0}
-      >
+        onClick={onButtonPress}
+        disabled={availableImprovements.size === 0}>
         Improve
       </Button>)
-    return button
   }
 }

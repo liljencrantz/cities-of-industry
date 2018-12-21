@@ -68,21 +68,27 @@ class UI extends React.Component {
       })
     }
 
-    const highlightCallback = (highlight, callback) => {
+    const queryUser = (highlight) => {
+      const that = this
       if (highlight.size == 0) {
-        this.setState({
-          ...this.state,
-          highlight: new Set(),
-          onTileSelect: this.showTileCallback(),
-          onHandSelect: this.showHandCallback(),
-        })
+        return new Promise(function (resolve, reject) {
+          that.setState({
+            ...that.state,
+            highlight: new Set(),
+            onTileSelect: that.showTileCallback(),
+            onHandSelect: that.showHandCallback(),
+          })
+          reject()
+        });
       } else {
-        this.setState({
-          ...this.state,
-          highlight: highlight,
-          onTileSelect: callback,
-          onHandSelect: callback,
-        })
+        return new Promise(function (resolve, reject) {
+          that.setState({
+            ...that.state,
+            highlight: highlight,
+            onTileSelect: resolve,
+            onHandSelect: resolve,
+          })
+        });
       }
     }
 
@@ -97,7 +103,7 @@ class UI extends React.Component {
               game={game}
               player={player}
               onAction={actionCallback}
-              onHighlight={highlightCallback}
+              queryUser={queryUser}
             />
 
           </Toolbar>
